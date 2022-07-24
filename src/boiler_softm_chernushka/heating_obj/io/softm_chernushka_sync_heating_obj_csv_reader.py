@@ -4,16 +4,13 @@ import pandas as pd
 from boiler.constants import column_names
 from boiler.data_processing.timestamp_parsing_algorithm import AbstractTimestampParsingAlgorithm
 from boiler.heating_obj.io.abstract_sync_heating_obj_reader import AbstractSyncHeatingObjReader
+from boiler_softm_chernushka.logging import logger
 
-import boiler_softm.constants.converting_parameters
-from boiler_softm.constants import circuit_ids
-from boiler_softm.constants import column_names as soft_m_column_names
-from boiler_softm.constants import processing
-from boiler_softm.logging import logger
+from boiler_softm_chernushka.constants import column_names as chernushka_column_names
+from boiler_softm_chernushka.constants import converting_parameters
 
 
 class SoftMSyncHeatingObjCSVReader(AbstractSyncHeatingObjReader):
-
     def __init__(self,
                  timestamp_parser: AbstractTimestampParsingAlgorithm,
                  need_columns: List[str],
@@ -29,13 +26,13 @@ class SoftMSyncHeatingObjCSVReader(AbstractSyncHeatingObjReader):
         self._float_columns = float_columns
         self._water_temp_columns = water_temp_columns
 
-        self._circuit_id_equals = boiler_softm.constants.converting_parameters.LYSVA_CIRCUIT_EQUALS
-        self._column_names_equals = boiler_softm.constants.converting_parameters.LYSVA_HEATING_OBJ_COLUMN_NAMES_EQUALS
+        self._circuit_id_equals = converting_parameters.CHERNUSHKA_CIRCUIT_ID_EQUALS
+        self._column_names_equals = converting_parameters.CHERNUSHKA_HEATING_OBJ_COLUMN_NAMES_EQUALS
 
         logger.debug(
             f"Creating instance:"
             f"encoding: {self._encoding}"
-            f"timestamp parser: {self._timestamp_parser}"
+            f"timestamp_parser: {self._timestamp_parser}"
             f"need_circuit: {self._need_circuit}"
             f"need_columns: {self._need_columns}"
             f"float_columns: {self._float_columns}"
@@ -68,7 +65,7 @@ class SoftMSyncHeatingObjCSVReader(AbstractSyncHeatingObjReader):
     def _exclude_unused_circuits(self, df: pd.DataFrame) -> pd.DataFrame:
         logger.debug("Excluding unused circuits")
         renamed_circuits = \
-            df[soft_m_column_names.LYSVA_HEATING_SYSTEM_CIRCUIT_ID].apply(str).replace(self._circuit_id_equals)
+            df[chernushka_column_names.CHERNUSHKA_HEATING_SYSTEM_CIRCUIT_ID].apply(str).replace(self._circuit_id_equals)
         df = df[renamed_circuits == self._need_circuit].copy()
         return df
 
@@ -85,16 +82,14 @@ class SoftMSyncHeatingObjCSVReader(AbstractSyncHeatingObjReader):
     def _parse_timestamp(self, df: pd.DataFrame) -> pd.DataFrame:
         logger.debug("Parsing datetime")
         df = df.copy()
-        df[column_names.TIMESTAMP] = df[column_names.TIMESTAMP].apply(
-            self._timestamp_parser.parse_datetime
-        )
+        df[column_names.TIMESTAMP] = df[column_names.TIMESTAMP].apply(self._timestamp_parser.parse_datetime)
         return df
 
     def _convert_values_to_float(self, df: pd.DataFrame) -> pd.DataFrame:
         logger.debug("Converting values to float")
         df = df.copy()
         for column_name in self._float_columns:
-            df[column_name] = df[column_name].str.replace(",", ".", regex=False)
+            df[column_name] = df[column_name].apply(str).replace(",", ".", regex=False)
             df[column_name] = df[column_name].apply(float)
         return df
 

@@ -6,8 +6,8 @@ import requests
 from boiler.temp_graph.io.abstract_sync_temp_graph_loader import AbstractSyncTempGraphLoader
 from boiler.temp_graph.io.abstract_sync_temp_graph_reader import AbstractSyncTempGraphReader
 
-from boiler_softm.constants import api_constants
-from boiler_softm.logging import logger
+from boiler_softm_chernushka.constants import api_constants
+from boiler_softm_chernushka.logging import logger
 
 
 class SoftMChernushkaSyncTempGraphOnlineLoader(AbstractSyncTempGraphLoader):

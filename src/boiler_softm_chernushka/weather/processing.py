@@ -7,10 +7,10 @@ from boiler.data_processing.timestamp_interpolator_algorithm import AbstractTime
 from boiler.data_processing.timestamp_round_algorithm import AbstractTimestampRoundAlgorithm
 from boiler.data_processing.value_interpolation_algorithm import AbstractValueInterpolationAlgorithm
 from boiler.weather.processing import AbstractWeatherProcessor
-from boiler_softm.logging import logger
+from boiler_softm_chernushka.logging import logger
 
 
-class SoftMWeatherProcessor(AbstractWeatherProcessor):
+class SoftMChernushkaWeatherProcessor(AbstractWeatherProcessor):
 
     def __init__(self,
                  timestamp_round_algorithm: AbstractTimestampRoundAlgorithm,

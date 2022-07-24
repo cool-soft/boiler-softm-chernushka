@@ -4,8 +4,8 @@ from typing import BinaryIO
 import pandas as pd
 from boiler.temp_graph.io.abstract_sync_temp_graph_reader import AbstractSyncTempGraphReader
 
-from boiler_softm.logging import logger
-from boiler_softm.constants import converting_parameters
+from boiler_softm_chernushka.logging import logger
+from boiler_softm_chernushka.constants import converting_parameters
 
 
 class SoftMChernushkaSyncTempGraphOnlineReader(AbstractSyncTempGraphReader):

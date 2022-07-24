@@ -3,9 +3,9 @@ from boiler.constants import column_names
 # noinspection PyProtectedMember
 from pandas.api.types import is_numeric_dtype
 
-from boiler_softm.temp_graph.io.soft_m_chernushka_sync_temp_graph_online_loader \
+from boiler_softm_chernushka.temp_graph.io.softm_chernushka_sync_temp_graph_online_loader \
     import SoftMChernushkaSyncTempGraphOnlineLoader
-from boiler_softm.temp_graph.io.soft_m_chernushka_sync_temp_graph_online_reader \
+from boiler_softm_chernushka.temp_graph.io.softm_chernushka_sync_temp_graph_online_reader \
     import SoftMChernushkaSyncTempGraphOnlineReader
 
 
@@ -16,12 +16,12 @@ class TestSoftMChernushkaSyncTempGraphOnlineLoader:
         return SoftMChernushkaSyncTempGraphOnlineReader()
 
     @pytest.fixture
-    def loader(self, reader, is_need_proxy, http_proxy_address):
+    def loader(self, reader, is_need_proxy, proxy_address):
         http_proxy = None
         https_proxy = None
         if is_need_proxy:
-            http_proxy = http_proxy_address
-            https_proxy = http_proxy_address
+            http_proxy = proxy_address
+            https_proxy = proxy_address
         loader = SoftMChernushkaSyncTempGraphOnlineLoader(
             reader=reader,
             http_proxy=http_proxy,

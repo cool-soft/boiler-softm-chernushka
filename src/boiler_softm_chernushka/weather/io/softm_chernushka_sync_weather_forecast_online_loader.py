@@ -7,16 +7,17 @@ from boiler.data_processing.beetween_filter_algorithm \
 from boiler.weather.io.abstract_sync_weather_loader import AbstractSyncWeatherLoader
 from boiler.weather.io.abstract_sync_weather_reader import AbstractSyncWeatherReader
 
-from boiler_softm.logging import logger
+from boiler_softm_chernushka.constants import api_constants
+from boiler_softm_chernushka.logging import logger
 
 
-class SoftMSyncWeatherForecastOnlineLoader(AbstractSyncWeatherLoader):
+class SoftMChernushkaSyncWeatherForecastOnlineLoader(AbstractSyncWeatherLoader):
 
     def __init__(self,
                  reader: AbstractSyncWeatherReader,
                  timestamp_filter_algorithm: AbstractTimestampFilterAlgorithm =
                  LeftClosedTimestampFilterAlgorithm(),
-                 server_address: str = "https://lysva.agt.town",
+                 server_address: str = api_constants.CHERNUSHKA_API_BASE,
                  http_proxy: Optional[str] = None,
                  https_proxy: Optional[str] = None
                  ) -> None:

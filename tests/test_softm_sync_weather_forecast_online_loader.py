@@ -4,25 +4,25 @@ from boiler.constants import column_names
 from pandas.api.types import is_numeric_dtype, is_datetime64tz_dtype
 from dateutil.tz import gettz
 
-from boiler_softm.weather.io.soft_m_sync_weather_forecast_online_loader import \
-    SoftMSyncWeatherForecastOnlineLoader
-from boiler_softm.weather.io.soft_m_sync_weather_forecast_json_reader import SoftMSyncWeatherForecastJSONReader
+from boiler_softm_chernushka.weather.io.softm_chernushka_sync_weather_forecast_online_loader import \
+    SoftMChernushkaSyncWeatherForecastOnlineLoader
+from boiler_softm_chernushka.weather.io.softm_chernushka_sync_weather_forecast_online_reader import SoftMChernushkaWeatherForecastOnlineReader
 
 
 class TestSoftMSyncWeatherForecastOnlineLoader:
 
     @pytest.fixture
     def reader(self):
-        return SoftMSyncWeatherForecastJSONReader(weather_data_timezone=gettz("Asia/Yekaterinburg"))
+        return SoftMChernushkaWeatherForecastOnlineReader(weather_data_timezone=gettz("Asia/Yekaterinburg"))
 
     @pytest.fixture
-    def loader(self, reader, is_need_proxy, http_proxy_address):
+    def loader(self, reader, is_need_proxy, proxy_address):
         http_proxy = None
         https_proxy = None
         if is_need_proxy:
-            http_proxy = http_proxy_address
-            https_proxy = http_proxy_address
-        loader = SoftMSyncWeatherForecastOnlineLoader(
+            http_proxy = proxy_address
+            https_proxy = proxy_address
+        loader = SoftMChernushkaSyncWeatherForecastOnlineLoader(
             reader=reader,
             http_proxy=http_proxy,
             https_proxy=https_proxy
