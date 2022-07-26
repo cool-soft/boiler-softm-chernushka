@@ -1,3 +1,4 @@
+import json
 from typing import Optional
 
 import pandas as pd
@@ -15,12 +16,14 @@ class SoftMChernushkaSyncWeatherForecastOnlineLoader(AbstractSyncWeatherLoader):
 
     def __init__(self,
                  reader: AbstractSyncWeatherReader,
+                 boiler_id: int = 1,
                  timestamp_filter_algorithm: AbstractTimestampFilterAlgorithm =
                  LeftClosedTimestampFilterAlgorithm(),
                  server_address: str = api_constants.CHERNUSHKA_API_BASE,
                  http_proxy: Optional[str] = None,
                  https_proxy: Optional[str] = None
                  ) -> None:
+        self._boiler_id = boiler_id
         self._weather_reader = reader
         self._weather_data_server_address = server_address
         self._timestamp_filter_algorithm = timestamp_filter_algorithm
@@ -31,6 +34,7 @@ class SoftMChernushkaSyncWeatherForecastOnlineLoader(AbstractSyncWeatherLoader):
             self._proxies.update({"https": https_proxy})
         logger.debug(
             f"Creating instance: "
+            f"boiler_id: {self._boiler_id}"
             f"reader: {self._weather_reader} "
             f"server_address: {self._weather_data_server_address} "
             f"timestamp_filter_algorithm: {self._timestamp_filter_algorithm} "
@@ -45,7 +49,10 @@ class SoftMChernushkaSyncWeatherForecastOnlineLoader(AbstractSyncWeatherLoader):
         url = f"{self._weather_data_server_address}/JSON"
         # noinspection SpellCheckingInspection
         params = {
-            "method": "getPrognozT"
+            "method": "ai_getPrognozT",
+            "argument": json.dumps(
+                {"boiler_id": self._boiler_id}
+            )
         }
         with requests.get(url=url, params=params, proxies=self._proxies, stream=True) as response:
             logger.debug(f"Weather forecast is loaded. Status code is {response.status_code}")
